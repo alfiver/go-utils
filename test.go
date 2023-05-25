@@ -4,11 +4,11 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/alfiver/go-utils/cache"
 	"github.com/alfiver/go-utils/db"
 	htp "github.com/alfiver/go-utils/http"
 	"github.com/alfiver/go-utils/ilog"
 	"github.com/alfiver/go-utils/utils"
-	"github.com/alfiver/go-utils/cache"
 )
 
 func main() {
@@ -21,5 +21,5 @@ func main() {
 	code, _ := utils.Google2FACode("VXCnU8oaCTGIp2dn")
 	fmt.Println(code)
 	htp.Get("https://www.baidu.com", time.Duration(1200), nil)
-    cache.New(5*time.Minute, 10*time.Minute)
+	cache.New(5*time.Minute, 10*time.Minute)
 }

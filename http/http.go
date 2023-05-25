@@ -23,15 +23,15 @@ func Get(link string, timeout time.Duration, headers map[string]string) ([]byte,
 	}
 	resp, err := client.Do(request)
 	if err != nil {
-        /**
-		if uerr, ok := err.(*url.Error); ok {
-			if nerr, ok := uerr.Err.(net.Error); ok {
-				if nerr.Timeout() {
-					// 记下这种写法
+		/**
+				if uerr, ok := err.(*url.Error); ok {
+					if nerr, ok := uerr.Err.(net.Error); ok {
+						if nerr.Timeout() {
+							// 记下这种写法
+						}
+					}
 				}
-			}
-		}
-        **/
+		        **/
 		return nil, err
 	}
 	defer resp.Body.Close()
