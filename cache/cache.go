@@ -159,9 +159,27 @@ func (c *cache) get(k string) (interface{}, bool) {
 	return item.Object, true
 }
 
+// Return the keys exists or not
+func (c *cache) Exist(k string) bool {
+	c.mu.RLock()
+	// "Inlining" of get and Expired
+	item, found := c.items[k]
+	if !found {
+		c.mu.RUnlock()
+		return false
+	}
+	if item.Expiration > 0 {
+		if time.Now().UnixNano() > item.Expiration {
+			c.mu.RUnlock()
+			return false
+		}
+	}
+	c.mu.RUnlock()
+	return true
+}
+
 // Increment an item of type int by n. Returns an error if the item's value is
-// not an int. If there is no error, the incremented
-// value is returned.
+// not an int. If there is no error, the incremented value is returned.
 func (c *cache) IncrementInt(k string, n int, d time.Duration) (int, bool) {
 	c.mu.Lock()
 	v, found := c.items[k]
@@ -182,8 +200,7 @@ func (c *cache) IncrementInt(k string, n int, d time.Duration) (int, bool) {
 }
 
 // Increment an item of type int32 by n. Returns an error if the item's value is
-// not an int32. If there is no error, the incremented
-// value is returned.
+// not an int32. If there is no error, the incremented value is returned.
 func (c *cache) IncrementInt32(k string, n int32, d time.Duration) (int32, bool) {
 	c.mu.Lock()
 	v, found := c.items[k]
@@ -204,8 +221,7 @@ func (c *cache) IncrementInt32(k string, n int32, d time.Duration) (int32, bool)
 }
 
 // Increment an item of type int64 by n. Returns an error if the item's value is
-// not an int64. If there is no error, the incremented
-// value is returned.
+// not an int64. If there is no error, the incremented value is returned.
 func (c *cache) IncrementInt64(k string, n int64, d time.Duration) (int64, bool) {
 	c.mu.Lock()
 	v, found := c.items[k]
@@ -226,8 +242,7 @@ func (c *cache) IncrementInt64(k string, n int64, d time.Duration) (int64, bool)
 }
 
 // Increment an item of type float64 by n. Returns an error if the item's value
-// is not an float64. If there is no error, the
-// incremented value is returned.
+// is not an float64. If there is no error, the incremented value is returned.
 func (c *cache) IncrementFloat64(k string, n float64, d time.Duration) (float64, bool) {
 	c.mu.Lock()
 	v, found := c.items[k]
@@ -248,8 +263,7 @@ func (c *cache) IncrementFloat64(k string, n float64, d time.Duration) (float64,
 }
 
 // Decrement an item of type int by n. Returns an error if the item's value is
-// not an int. If there is no error, the decremented
-// value is returned.
+// not an int. If there is no error, the decremented value is returned.
 func (c *cache) DecrementInt(k string, n int, d time.Duration) (int, bool) {
 	c.mu.Lock()
 	v, found := c.items[k]
@@ -270,8 +284,7 @@ func (c *cache) DecrementInt(k string, n int, d time.Duration) (int, bool) {
 }
 
 // Decrement an item of type int32 by n. Returns an error if the item's value is
-// not an int32. If there is no error, the decremented
-// value is returned.
+// not an int32. If there is no error, the decremented value is returned.
 func (c *cache) DecrementInt32(k string, n int32, d time.Duration) (int32, bool) {
 	c.mu.Lock()
 	v, found := c.items[k]
@@ -292,8 +305,7 @@ func (c *cache) DecrementInt32(k string, n int32, d time.Duration) (int32, bool)
 }
 
 // Decrement an item of type int64 by n. Returns an error if the item's value is
-// not an int64. If there is no error, the decremented
-// value is returned.
+// not an int64. If there is no error, the decremented value is returned.
 func (c *cache) DecrementInt64(k string, n int64, d time.Duration) (int64, bool) {
 	c.mu.Lock()
 	v, found := c.items[k]
@@ -314,8 +326,7 @@ func (c *cache) DecrementInt64(k string, n int64, d time.Duration) (int64, bool)
 }
 
 // Decrement an item of type float64 by n. Returns an error if the item's value
-// is not an float64. If there is no error, the
-// decremented value is returned.
+// is not an float64. If there is no error, the decremented value is returned.
 func (c *cache) DecrementFloat64(k string, n float64, d time.Duration) (float64, bool) {
 	c.mu.Lock()
 	v, found := c.items[k]
