@@ -215,7 +215,8 @@ func (c *cache) IncrementInt(k string, n int, d time.Duration) (int, bool) {
 	v, found := c.items[k]
 	if !found || v.Expired() {
 		c.set(k, n, d)
-		v, _ = c.items[k]
+        c.mu.Unlock()
+        return n, true
 	}
 	rv, ok := v.Object.(int)
 	if !ok {
@@ -236,7 +237,8 @@ func (c *cache) IncrementInt32(k string, n int32, d time.Duration) (int32, bool)
 	v, found := c.items[k]
 	if !found || v.Expired() {
 		c.set(k, n, d)
-		v, _ = c.items[k]
+        c.mu.Unlock()
+        return n, true
 	}
 	rv, ok := v.Object.(int32)
 	if !ok {
@@ -257,7 +259,8 @@ func (c *cache) IncrementInt64(k string, n int64, d time.Duration) (int64, bool)
 	v, found := c.items[k]
 	if !found || v.Expired() {
 		c.set(k, n, d)
-		v, _ = c.items[k]
+        c.mu.Unlock()
+        return n, true
 	}
 	rv, ok := v.Object.(int64)
 	if !ok {
@@ -278,7 +281,8 @@ func (c *cache) IncrementFloat64(k string, n float64, d time.Duration) (float64,
 	v, found := c.items[k]
 	if !found || v.Expired() {
 		c.set(k, n, d)
-		v, _ = c.items[k]
+        c.mu.Unlock()
+        return n, true
 	}
 	rv, ok := v.Object.(float64)
 	if !ok {
@@ -299,7 +303,8 @@ func (c *cache) DecrementInt(k string, n int, d time.Duration) (int, bool) {
 	v, found := c.items[k]
 	if !found || v.Expired() {
 		c.set(k, n, d)
-		v, _ = c.items[k]
+        c.mu.Unlock()
+        return n, true
 	}
 	rv, ok := v.Object.(int)
 	if !ok {
@@ -320,7 +325,8 @@ func (c *cache) DecrementInt32(k string, n int32, d time.Duration) (int32, bool)
 	v, found := c.items[k]
 	if !found || v.Expired() {
 		c.set(k, n, d)
-		v, _ = c.items[k]
+        c.mu.Unlock()
+        return n, true
 	}
 	rv, ok := v.Object.(int32)
 	if !ok {
@@ -341,7 +347,8 @@ func (c *cache) DecrementInt64(k string, n int64, d time.Duration) (int64, bool)
 	v, found := c.items[k]
 	if !found || v.Expired() {
 		c.set(k, n, d)
-		v, _ = c.items[k]
+        c.mu.Unlock()
+        return n, true
 	}
 	rv, ok := v.Object.(int64)
 	if !ok {
@@ -362,7 +369,8 @@ func (c *cache) DecrementFloat64(k string, n float64, d time.Duration) (float64,
 	v, found := c.items[k]
 	if !found || v.Expired() {
 		c.set(k, n, d)
-		v, _ = c.items[k]
+        c.mu.Unlock()
+        return n, true
 	}
 	rv, ok := v.Object.(float64)
 	if !ok {
